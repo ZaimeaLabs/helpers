@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 use Carbon\Carbon;
 
-if (! function_exists('minutesToDuration')) {
+if (! function_exists('minutes_to_duration')) {
     /**
      * Converts an integer number of minutes into duration string.
      * Returns time format H:i from minutes.
      * Formats returned HH:MM, HHH:MM, HH, or HHH.
      *
-     * @param  int|string $minutes
-     * @param  bool       $abbreviate
-     *
+     * @param  int|float $minutes
+     * @param  bool      $abbreviate
      * @return string
      */
-    function minutesToDuration(int|string $minutes, bool $abbreviate = false): string
+    function minutes_to_duration(int|float $minutes, bool $abbreviate = false): string
     {
         $sign = $minutes >= 0 ? '' : '-';
         $minutes = abs($minutes);
@@ -36,7 +35,7 @@ if (! function_exists('minutesToDuration')) {
     }
 }
 
-if (! function_exists('timeToMinutes')) {
+if (! function_exists('time_to_minutes')) {
     /**
      * Transform time into minutes.
      * Seconds are not counted.
@@ -44,9 +43,9 @@ if (! function_exists('timeToMinutes')) {
      *
      * @param  mixed  $time
      *
-     * @return float|int
+     * @return int
      */
-    function timeToMinutes(mixed $time): float|int
+    function time_to_minutes(mixed $time): int
     {
         if ($time instanceof DateTimeInterface) {
             $time = $time->format('H:i');
@@ -57,7 +56,7 @@ if (! function_exists('timeToMinutes')) {
     }
 }
 
-if (! function_exists('sumTime')) {
+if (! function_exists('sum_time')) {
     /**
      * Returns the sum of times.
      *
@@ -65,7 +64,7 @@ if (! function_exists('sumTime')) {
      *
      * @return string
      */
-    function sumTime(array $entitiy): string
+    function sum_time(array $entitiy): string
     {
         $time = (array)$entitiy;
         $time = array_filter($time, function ($item) {
@@ -91,7 +90,7 @@ if (! function_exists('sumTime')) {
     }
 }
 
-if (! function_exists('toDecimalTime')) {
+if (! function_exists('to_decimal_time')) {
     /**
      * Transform H:i format time to decimal time.
      * Seconds are not counted.
@@ -102,10 +101,10 @@ if (! function_exists('toDecimalTime')) {
      *
      * @return float
     */
-    function toDecimalTime(mixed $time, bool $transofrm = false): float
+    function to_decimal_time(mixed $time, bool $transofrm = false): float
     {
         if($transofrm) {
-            $time = minutesToDuration($time);
+            $time = minutes_to_duration((int)$time);
         }
 
         if ($time instanceof DateTimeInterface) {
@@ -119,7 +118,7 @@ if (! function_exists('toDecimalTime')) {
     }
 }
 
-if (! function_exists('validTemplateText')) {
+if (! function_exists('valid_template_text')) {
     /**
      * Used to check text-based user input.
      * We identify these parts by 3 "stop sign" emojis (aka "octagonal sign" U+1F6D1).
@@ -129,14 +128,14 @@ if (! function_exists('validTemplateText')) {
      *
      * @return bool $valid
      */
-    function validTemplateText(string $text, string $template = '🛑🛑🛑'): bool
+    function valid_template_text(string $text, string $template = '🛑🛑🛑'): bool
     {
         $valid = strpos($text, $template) === false; // no 3 "stop sign" emojis in a row.
         return $valid;
     }
 }
 
-if (! function_exists('isValidDate')) {
+if (! function_exists('is_valid_date')) {
     /**
      * Is used to check user input to validate a date.
      *
@@ -144,7 +143,7 @@ if (! function_exists('isValidDate')) {
      *
      * @return bool
      */
-    function isValidDate(mixed $date): bool
+    function is_valid_date(mixed $date): bool
     {
         if ($date instanceof DateTimeInterface) {
             return true;
@@ -161,5 +160,51 @@ if (! function_exists('isValidDate')) {
         $value = date_parse($date);
 
         return checkdate($value['month'], $value['day'], $value['year']);
+    }
+}
+
+if (!function_exists('get_package_version')) {
+    /**
+     * Is used to get package version.
+     *
+     * @param string $package
+     *
+     * @return string|null
+     */
+    function get_package_version($package): string|null
+    {
+        $file = base_path('composer.lock');
+        $composer_packages = json_decode(file_get_contents($file), true)['packages'];
+
+        foreach ($composer_packages as $composer_package) {
+            if ($composer_package['name'] == $package) {
+                return $package['version'];
+            }
+        }
+
+        return null;
+    }
+}
+
+if (!function_exists('has_package')) {
+    /**
+     * Is used to check if package is installed.
+     *
+     * @param string $package
+     *
+     * @return bool
+     */
+    function has_package($package): bool
+    {
+        $file = base_path('composer.lock');
+        $composer_packages = json_decode(file_get_contents($file), true)['packages'];
+
+        foreach ($composer_packages as $composer_package) {
+            if ($composer_package['name'] == $package) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
