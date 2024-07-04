@@ -178,7 +178,7 @@ if (!function_exists('get_package_version')) {
 
         foreach ($composer_packages as $composer_package) {
             if ($composer_package['name'] == $package) {
-                return $package['version'];
+                return $composer_package['version'];
             }
         }
 
