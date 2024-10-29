@@ -22,6 +22,9 @@
         "pestphp/pest": "^2.0"
     },
     "autoload": {
+        "psr-4": {
+            "ZaimeaLabs\\Helpers\\": ""
+        },
         "files": [
             "helpers.php"
         ]
@@ -34,6 +37,11 @@
     "extra": {
         "branch-alias": {
             "dev-master": "1.x-dev"
+        },
+        "laravel": {
+            "providers": [
+                "ZaimeaLabs\\Helpers\\HelpersServiceProvider"
+            ]
         }
     },
     "config": {

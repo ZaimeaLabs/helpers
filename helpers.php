@@ -41,11 +41,10 @@ if (! function_exists('time_to_minutes')) {
      * Seconds are not counted.
      * Returns minutes from time format H:i:s|H:i
      *
-     * @param  mixed  $time
-     *
+     * @param  \DateTimeInterface|string  $time
      * @return int
      */
-    function time_to_minutes(mixed $time): int
+    function time_to_minutes(\DateTimeInterface|string $time): int
     {
         if ($time instanceof DateTimeInterface) {
             $time = $time->format('H:i');
@@ -56,12 +55,38 @@ if (! function_exists('time_to_minutes')) {
     }
 }
 
+if (! function_exists('minutes_to_hours')) {
+    /**
+     * Converts an integer number of minutes into hours string.
+     * Returns time format H from minutes.
+     * Formats returned HH, or HHH.
+     *
+     * @param  int|float $minutes
+     * @param  bool      $abbreviate
+     * @return string
+     */
+    function minutes_to_hours(int|float $minutes, bool $abbreviate = false): string
+    {
+        $sign = $minutes >= 0 ? '' : '-';
+        $minutes = abs($minutes);
+
+        $hours = (string) (int)($minutes / 60);
+
+        if (strlen($hours) == 1)
+            $hours = '0' . $hours;
+
+        if ($abbreviate)
+            return $sign.$hours;
+
+        return $sign.$hours;
+    }
+}
+
 if (! function_exists('sum_time')) {
     /**
      * Returns the sum of times.
      *
      * @param  array  $entitiy
-     *
      * @return string
      */
     function sum_time(array $entitiy): string
@@ -96,12 +121,11 @@ if (! function_exists('to_decimal_time')) {
      * Seconds are not counted.
      * Ex 01:30 worked hours into 1.30
      *
-     * @param  mixed  $time / in format H:i:s or H:i
+     * @param  \DateTimeInterface|string|int  $time / in format H:i:s or H:i
      * @param  bool   $transform
-     *
      * @return float
     */
-    function to_decimal_time(mixed $time, bool $transofrm = false): float
+    function to_decimal_time(\DateTimeInterface|string|int $time, bool $transofrm = false): float
     {
         if($transofrm) {
             $time = minutes_to_duration((int)$time);
@@ -125,8 +149,7 @@ if (! function_exists('valid_template_text')) {
      *
      * @param  string $text
      * @param  string|null $template
-     *
-     * @return bool $valid
+     * @return bool
      */
     function valid_template_text(string $text, string $template = '🛑🛑🛑'): bool
     {
@@ -139,11 +162,10 @@ if (! function_exists('is_valid_date')) {
     /**
      * Is used to check user input to validate a date.
      *
-     * @param  mixed $date
-     *
+     * @param  \DateTimeInterface|string $date
      * @return bool
      */
-    function is_valid_date(mixed $date): bool
+    function is_valid_date(\DateTimeInterface|string $date): bool
     {
         if ($date instanceof DateTimeInterface) {
             return true;
@@ -167,8 +189,7 @@ if (!function_exists('get_package_version')) {
     /**
      * Is used to get package version.
      *
-     * @param string $package
-     *
+     * @param  string $package
      * @return string|null
      */
     function get_package_version($package): string|null
@@ -190,8 +211,7 @@ if (!function_exists('has_package')) {
     /**
      * Is used to check if package is installed.
      *
-     * @param string $package
-     *
+     * @param  string $package
      * @return bool
      */
     function has_package($package): bool
@@ -206,5 +226,46 @@ if (!function_exists('has_package')) {
         }
 
         return false;
+    }
+}
+
+if (!function_exists('object_to_array')) {
+    /**
+     * Convert stdClass Object to Array.
+     *
+     * @param  $data
+     * @return array
+     */
+    function object_to_array($data): mixed
+    {
+        if (is_object($data)) {
+            $data = get_object_vars($data);
+        }
+
+        if (is_array($data)) {
+            return array_map(__FUNCTION__, $data);
+        }
+        else {
+            return $data;
+        }
+    }
+}
+
+
+if (!function_exists('object_to_array')) {
+    /**
+     * Convert Array to stdClass Object.
+     *
+     * @param  $data
+     * @return object
+     */
+    function object_to_array($data): mixed
+    {
+        if (is_array($data)) {
+            return (object)array_map(__FUNCTION__, $data);
+        }
+        else {
+            return $data;
+        }
     }
 }
