@@ -87,10 +87,41 @@ if (! function_exists('sum_time')) {
      * Returns the sum of times.
      *
      * @param  array  $entitiy
+     * @param  bool   $carbon
      * @return string
      */
-    function sum_time(array $entitiy): string
+    function sum_time(array $entitiy, bool $carbon = false): string
     {
+        $a = '01:00:00';
+        $b = '01:00:00';
+        $c = '01:00:00';
+
+        //convert the $a in carbon instance.
+        //convert $b and $c in integer, you can add only integer with carbon.
+        $d = Carbon::createFromFormat('H:i:s',$a)->addHours(intval($b))->addHours((intval($c)));
+
+        //convert the time "45:00:00" to carbon
+        $e = Carbon::createFromFormat('H:i:s','45:00:00');
+
+        //return the difference
+        //dd($e->diffInHours($d));
+
+        //work, up to this line
+        if($carbon) {
+            $hh = 0; $mm = 0; $ss = 0;
+
+            foreach ($entitiy as $time) {
+                sscanf( $time, '%d:%d:%d', $hours, $mins, $secs);
+                $hh += $hours;
+                $mm += $mins;
+                $ss += $secs;
+            }
+
+            $mm += floor( $ss / 60 ); $ss = $ss % 60;
+            $hh += floor( $mm / 60 ); $mm = $mm % 60;
+            return sprintf('%02d:%02d:%02d', $hh, $mm, $ss);
+        }
+
         $time = (array)$entitiy;
         $time = array_filter($time, function ($item) {
             return !in_array($item, ['00:00', '00:00:00', '0:00:00']);
@@ -251,15 +282,14 @@ if (!function_exists('object_to_array')) {
     }
 }
 
-
-if (!function_exists('object_to_array')) {
+if (!function_exists('array_to_object')) {
     /**
      * Convert Array to stdClass Object.
      *
      * @param  $data
      * @return object
      */
-    function object_to_array($data): mixed
+    function array_to_object($data): mixed
     {
         if (is_array($data)) {
             return (object)array_map(__FUNCTION__, $data);
@@ -267,5 +297,22 @@ if (!function_exists('object_to_array')) {
         else {
             return $data;
         }
+    }
+}
+
+if (!function_exists('count_true')) {
+    /**
+     * Counts all elements in an array or in a object.
+     *
+     * @param  array|object $data
+     * @return int
+     */
+    function count_values(array|object $data): int
+    {
+        if (is_object($data)) {
+            $data = object_to_array($data);
+        }
+
+        return count(array_filter($data));
     }
 }
