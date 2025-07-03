@@ -184,8 +184,7 @@ if (! function_exists('valid_template_text')) {
      */
     function valid_template_text(string $text, string $template = '🛑🛑🛑'): bool
     {
-        $valid = strpos($text, $template) === false; // no 3 "stop sign" emojis in a row.
-        return $valid;
+        return strpos($text, $template) === false; // no 3 "stop sign" emojis in a row.
     }
 }
 
@@ -323,20 +322,22 @@ if (!function_exists('str_contains_any')) {
      *
      * @param  string $haystack
      * @param  array|object $needles
-     * @return string|bool
+     * @return array
      */
-    function str_contains_any(string $haystack, array $needles): string|bool
+    function str_contains_any(string $haystack, array $needles): array
     {
+        $contains = [];
+
         if (is_object($needles)) {
             $needles = object_to_array($needles);
         }
 
         foreach ($needles as $needle) {
             if (stristr($haystack, $needle) !== false) {
-                return $needle;
+                $contains[] = $needle;
             }
         }
 
-        return false;
+        return $contains;
     }
 }
