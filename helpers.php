@@ -316,3 +316,27 @@ if (!function_exists('count_true')) {
         return count(array_filter($data));
     }
 }
+
+if (!function_exists('str_contains_any')) {
+    /**
+     * Check if string contains any from an array/object.
+     *
+     * @param  string $haystack
+     * @param  array|object $needles
+     * @return string|bool
+     */
+    function str_contains_any(string $haystack, array $needles): string|bool
+    {
+        if (is_object($needles)) {
+            $needles = object_to_array($needles);
+        }
+
+        foreach ($needles as $needle) {
+            if (stristr($haystack, $needle) !== false) {
+                return $needle;
+            }
+        }
+
+        return false;
+    }
+}
