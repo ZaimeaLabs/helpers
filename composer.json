@@ -1,11 +1,12 @@
 {
-    "name": "zaimealabs/helpers",
+    "name": "zaimea/helpers",
     "license": "MIT",
     "homepage": "https://zaimea.com",
     "description": "The ZaimeaLabs Helpers package.",
     "keywords": [
         "helpers",
         "laravel",
+        "zaimea",
         "zaimealabs"
     ],
     "authors": [
@@ -18,12 +19,13 @@
         "php": "^8.2"
     },
     "require-dev": {
-        "orchestra/testbench": "^8.0|^9.0|^10.0",
-        "pestphp/pest": "^2.0|^3.0"
+        "orchestra/testbench": "^10.0",
+        "phpstan/phpstan": "^1.12.23",
+        "pestphp/pest": "^3.0"
     },
     "autoload": {
         "files": [
-            "helpers.php"
+            "src/helpers.php"
         ]
     },
     "autoload-dev": {
