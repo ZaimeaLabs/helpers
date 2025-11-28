@@ -7,4 +7,4 @@ sidebar: true
 rightbar: false
 ---
 
-All notable changes to Helpers are documented [on GitHub](https://github.com/zaimealabs/helpers/blob/main/CHANGELOG.md)
+All notable changes to `Helpers` are documented [on GitHub](https://github.com/zaimealabs/helpers/blob/main/CHANGELOG.md)
